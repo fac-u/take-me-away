@@ -2,17 +2,13 @@
   "name": "take-me-away",
   "version": "1.0.0",
   "description": "Travel",
-  "main": "server.js",
-  "directories": {
+  "main": "index.js",
+  "scripts": {
     "test": "tape 'test/**/*.js' | tap-spec",
-    "start": "node server.js",
+    "start": "node index.js",
     "coverage": "istanbul cover ./node_modules/tape/bin/tape ./test/*.js",
     "posttest": "istanbul report lcov && codecov",
-    "devStart": "nodemon server.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "devStart": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -36,5 +32,11 @@
     "nodemon": "^1.11.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.2"
+  },
+  "dependencies": {
+    "handlebars": "^4.0.6",
+    "hapi": "^15.2.0",
+    "inert": "^4.0.2",
+    "vision": "^4.1.0"
   }
 }
