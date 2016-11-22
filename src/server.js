@@ -4,6 +4,7 @@ const Inert = require('inert');
 const Handlebars = require('handlebars');
 const server = new Hapi.Server();
 const request = require("request");
+const getArticles = require("./news");
 const {wundergroundKey} = require('../api-keys.js');
 
 
@@ -33,7 +34,13 @@ server.register(Vision, (err) => {
       request(url,  function(err, response, body) {
         if (err) throw err;
         processWeatherObject(body, function (err, weatherData) {
-          reply.view('index', {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond});
+          var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond};
+          function buildView(err, result) {
+            context.articles = result;
+            console.log(context);
+            reply.view('index', context);
+          }
+          getArticles(buildView);
         })
       });
 
