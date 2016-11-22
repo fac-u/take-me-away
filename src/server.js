@@ -3,6 +3,8 @@ const Vision = require('vision');
 const Inert = require('inert');
 const Handlebars = require('handlebars');
 const server = new Hapi.Server();
+const request = require("request");
+const {wundergroundKey} = require('../api-keys.js');
 
 
 server.connection({
@@ -16,14 +18,35 @@ server.register(Vision, (err) => {
     engines: {
       html: Handlebars
     },
-    path: 'views'
+    path: 'views',
+    layoutPath: 'views/layout',
+    layout: 'layout',
+    partialsPath: 'views/partials'
   });
 
   server.route({
     path: '/',
     method: 'GET',
-    handler: (request, reply) => {
-      reply.view('index');
+    handler: (req, reply) => {
+
+      var url = 'http://api.wunderground.com/api/' + wundergroundKey + '/forecast/lang:EN/q/autoip.json';
+      request(url,  function(err, response, body) {
+        if (err) throw err;
+        processWeatherObject(body, function (err, weatherData) {
+          reply.view('index', {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond});
+        })
+      });
+
+      function processWeatherObject(obj, cb) {
+        obj = JSON.parse(obj);
+        var yourLocationRaw = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
+        weatherData.yourLocation = yourLocationRaw.replace(/\w+\//, '');
+        var cond = obj.forecast.simpleforecast.forecastday[0].conditions;
+        weatherData.cond = cond.toLowerCase();
+        weatherData.topTemp = obj.forecast.simpleforecast.forecastday[0].high.celsius;
+        cb(err, weatherData);
+      }
+      var weatherData = {};
     }
   });
 });
