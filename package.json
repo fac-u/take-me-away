@@ -37,6 +37,8 @@
     "handlebars": "^4.0.6",
     "hapi": "^15.2.0",
     "inert": "^4.0.2",
-    "vision": "^4.1.0"
+    "request": "^2.79.0",
+    "vision": "^4.1.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }
