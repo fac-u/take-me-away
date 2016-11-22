@@ -1,5 +1,5 @@
 <section class="news">
-  <div class="item1"></div>
-  <div class="item2"></div>
-  <button id="more">more...</button>
+  {{#each articles}}
+    <div class="article">{{this.title}}</div>
+  {{/each}}
 </section>
