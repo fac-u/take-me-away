@@ -16,14 +16,17 @@ server.register(Vision, (err) => {
     engines: {
       html: Handlebars
     },
-    path: 'views'
+    path: 'views',
+    layoutPath: 'views/layout',
+    layout: 'layout',
+    partialsPath: 'views/partials'
   });
 
   server.route({
     path: '/',
     method: 'GET',
     handler: (request, reply) => {
-      reply.view('index');
+      reply.view('index', {temp: '24 degrees'});
     }
   });
 });
