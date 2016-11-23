@@ -27,7 +27,7 @@ tape('check homepage route', (t) => {
 })
 /*
 Server handles dynamically generated pages (ie. views)
-Server handles 404s */
+Server handles 40s */
 tape('Check the main handler "/" serves the homepage template', (t) => {
   var options = {
     url: '/',
