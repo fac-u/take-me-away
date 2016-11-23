@@ -1,8 +1,8 @@
 const request = require('request');
-const {newsApiKey} = require('../api-keys.js');
+const env = require('env2')('./api-keys.env');
 
 var getArticles = (cb) => {
-  var url = `https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=${newsApiKey}`;
+  var url = `https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=${process.env.NEWS_KEY}`;
   request(url, (err, response, body) => {
     if (err || response.statusCode !== 200) {
       cb(err);
