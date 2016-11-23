@@ -1,10 +1,19 @@
+html {
+  background: url(https://media.timeout.com/images/100644443/image.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 #mainContainer {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #999;
-  padding:20px;
+  opacity: 0.6;
+  padding: 20px;
   border-radius: 10px;
   text-align: center;
 }
