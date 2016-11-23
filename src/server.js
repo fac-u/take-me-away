@@ -32,10 +32,13 @@ server.register(Vision, (err) => {
 
       var url = 'http://api.wunderground.com/api/' + wundergroundKey + '/forecast/lang:EN/q/autoip.json';
       request(url,  function(err, response, body) {
-        if (err) throw err;
+        if (err) {
+          //insert addition code here in case of lack of weather content
+          throw err;
+        }
         processWeatherObject(body, function (err, weatherData) {
           var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond};
-          function buildView(err, result) {
+          function buildView(result) {
             context.articles = result;
             console.log(context);
             reply.view('index', context);
