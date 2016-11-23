@@ -6,6 +6,7 @@ const server = new Hapi.Server();
 const request = require("request");
 const getArticles = require("./news");
 const {wundergroundKey} = require('../api-keys.js');
+const env = require('env2')('./api-keys.env');
 
 
 server.connection({
@@ -30,7 +31,7 @@ server.register(Vision, (err) => {
     method: 'GET',
     handler: (req, reply) => {
 
-      var url = 'http://api.wunderground.com/api/' + wundergroundKey + '/forecast/lang:EN/q/autoip.json';
+      var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
       request(url,  function(err, response, body) {
         if (err) {
           //insert addition code here in case of lack of weather content
@@ -40,7 +41,6 @@ server.register(Vision, (err) => {
           var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond, icon: weatherData.icon};
           function buildView(result) {
             context.articles = result;
-            console.log(context);
             reply.view('index', context);
           }
           getArticles(buildView);
