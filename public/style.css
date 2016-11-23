@@ -1,10 +1,36 @@
-#mainContainer {
+html {
+  background: url(https://media.timeout.com/images/100644443/image.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.weather {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  color: white;
+  top: 10%;
+  left: 15%;
   background-color: #999;
-  padding:20px;
+  opacity: 0.9;
+  padding: 20px;
   border-radius: 10px;
   text-align: center;
+}
+
+.news {
+  position: absolute;
+  top: 10%;
+  right: 9%;
+  text-align: left;
+  max-width: 25rem;
+}
+
+.article {
+  color: white;
+  background-color: #999;
+  opacity: 0.9;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 20px;
 }

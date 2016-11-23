@@ -37,7 +37,7 @@ server.register(Vision, (err) => {
           throw err;
         }
         processWeatherObject(body, function (err, weatherData) {
-          var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond};
+          var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond, icon: weatherData.icon};
           function buildView(result) {
             context.articles = result;
             console.log(context);
@@ -52,6 +52,8 @@ server.register(Vision, (err) => {
         var yourLocationRaw = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
         weatherData.yourLocation = yourLocationRaw.replace(/\w+\//, '');
         var cond = obj.forecast.simpleforecast.forecastday[0].conditions;
+        var icon = obj.forecast.simpleforecast.forecastday[0].icon_url
+        weatherData.icon = icon
         weatherData.cond = cond.toLowerCase();
         weatherData.topTemp = obj.forecast.simpleforecast.forecastday[0].high.celsius;
         cb(err, weatherData);
