@@ -25,20 +25,17 @@ server.register(Vision, (err) => {
     partialsPath: 'views/partials'
   });
 
-  server.route({
+server.route({
     path: '/',
     method: 'GET',
     handler: (req, reply) => {
 
       var url = 'http://api.wunderground.com/api/' + wundergroundKey + '/forecast/lang:EN/q/autoip.json';
       request(url,  function(err, response, body) {
-        if (err) {
-          //insert addition code here in case of lack of weather content
-          throw err;
-        }
+        if (err) throw err;
         processWeatherObject(body, function (err, weatherData) {
-          var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond, icon: weatherData.icon};
-          function buildView(result) {
+          var context = {temp: weatherData.topTemp, city: weatherData.city, cond: weatherData.cond};
+          function buildView(err, result) {
             context.articles = result;
             console.log(context);
             reply.view('index', context);
@@ -49,16 +46,19 @@ server.register(Vision, (err) => {
 
       function processWeatherObject(obj, cb) {
         obj = JSON.parse(obj);
-        var yourLocationRaw = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
-        weatherData.yourLocation = yourLocationRaw.replace(/\w+\//, '');
-        var cond = obj.forecast.simpleforecast.forecastday[0].conditions;
-        var icon = obj.forecast.simpleforecast.forecastday[0].icon_url
-        weatherData.icon = icon
-        weatherData.cond = cond.toLowerCase();
-        weatherData.topTemp = obj.forecast.simpleforecast.forecastday[0].high.celsius;
+        let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
+        let city = location.replace(/\w+\//, '');
+        let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
+        let topTemp = obj.forecast.simpleforecast.forecastday[0].high.celsius;
+
+        weatherData = {
+          city: city,
+          cond: cond.toLowerCase(),
+          topTemp: topTemp
+        }
         cb(err, weatherData);
       }
-      var weatherData = {};
+      var weatherData;
     }
   });
 });
