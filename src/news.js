@@ -2,19 +2,20 @@ const request = require('request');
 const {newsApiKey} = require('../api-keys.js');
 
 var getArticles = (cb) => {
-  request(`https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=${newsApiKey}`, (err, response, body) => {
-    let articles;
+  var url = `https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=${newsApiKey}`;
+  request(url, (err, response, body) => {
     if (err || response.statusCode !== 200) {
-      articles = [{title: 'Giraffes rob bank in Nairobi'}, {title: 'Aliens land on earth, not in America'}];
+      cb(err);
     } else {
-      console.log('Body is: ', body)
       let result = JSON.parse(body);
-      articles = result.articles.slice(0,5);
+      let articles = result.articles.slice(0,5);
+      cb(null, articles);
     }
-    cb(articles);
   });
 }
 
-// getArticles(handlebarsFunctionGoesHere)
-
 module.exports = getArticles;
+
+/*
+articles = [{title: 'Giraffes rob bank in Nairobi'}, {title: 'Aliens land on earth, not in America'}];
+*/
