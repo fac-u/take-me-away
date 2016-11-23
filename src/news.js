@@ -9,7 +9,7 @@ var getArticles = (cb) => {
     } else {
       console.log('Body is: ', body)
       let result = JSON.parse(body);
-      articles = result.articles.slice(0,2);
+      articles = result.articles.slice(0,5);
     }
     cb(articles);
   });

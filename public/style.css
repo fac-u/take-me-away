@@ -20,9 +20,9 @@ html {
 
 .news {
   position: absolute;
-  bottom: 10%;
-  right: 10%;
-  text-align: center;
+  top: 10%;
+  right: 9%;
+  text-align: left;
   max-width: 25rem;
 }
 
