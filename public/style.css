@@ -6,14 +6,28 @@ html {
   background-size: cover;
 }
 
-#mainContainer {
+.weather {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 10%;
+  left: 15%;
   background-color: #999;
   opacity: 0.6;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
+}
+
+.news {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  text-align: center;
+}
+
+.article {
+  background-color: #999;
+  opacity: 0.6;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 20px;
 }
