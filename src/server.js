@@ -5,7 +5,6 @@ const Handlebars = require('handlebars');
 const server = new Hapi.Server();
 const request = require("request");
 const getArticles = require("./news");
-const {wundergroundKey} = require('../api-keys.js');
 const env = require('env2')('./api-keys.env');
 
 
@@ -31,34 +30,52 @@ server.register(Vision, (err) => {
     method: 'GET',
     handler: (req, reply) => {
 
-      var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
-      request(url,  function(err, response, body) {
-        if (err) {
-          //insert addition code here in case of lack of weather content
-          throw err;
-        }
-        processWeatherObject(body, function (err, weatherData) {
-          var context = {temp: weatherData.topTemp, location: weatherData.yourLocation, cond: weatherData.cond, icon: weatherData.icon};
-          function buildView(result) {
-            context.articles = result;
-            reply.view('index', context);
-          }
-          getArticles(buildView);
-        })
-      });
+      let context = {};
+      let counter = 2;
 
-      function processWeatherObject(obj, cb) {
-        obj = JSON.parse(obj);
-        var yourLocationRaw = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
-        weatherData.yourLocation = yourLocationRaw.replace(/\w+\//, '');
-        var cond = obj.forecast.simpleforecast.forecastday[0].conditions;
-        var icon = obj.forecast.simpleforecast.forecastday[0].icon_url
-        weatherData.icon = icon
-        weatherData.cond = cond.toLowerCase();
-        weatherData.topTemp = obj.forecast.simpleforecast.forecastday[0].high.celsius;
-        cb(err, weatherData);
+      function buildView (context) {
+        reply.view('index', context);
       }
-      var weatherData = {};
+
+      getArticles(processArticles);
+      getWeather(processWeather);
+
+      function getWeather (cb) {
+        var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
+        request(url, (err, response, body) => {
+          if (err || response.statusCode !== 200) {
+            cb(err);
+          } else {
+            cb(null, body);
+          }
+        })
+      }
+
+      function processWeather(err, obj) {
+        obj = JSON.parse(obj);
+        let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
+        let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
+        const weatherData = {
+          city: location.replace(/\w+\//, ''),
+          cond: cond.toLowerCase(),
+          topTemp: obj.forecast.simpleforecast.forecastday[0].high.celsius,
+          icon: obj.forecast.simpleforecast.forecastday[0].icon_url
+        }
+        context.weatherData = weatherData;
+        counter--;
+        if (counter === 0) {
+          buildView(context);
+        }
+      }
+
+      function processArticles(err, obj) {
+        context.articles = obj;
+        counter--;
+        if (counter === 0) {
+          buildView(context);
+        }
+      }
+
     }
   });
 });
@@ -75,6 +92,6 @@ server.register(Inert, (err) => {
       }
     }
   })
-})
+});
 
 module.exports = server;
