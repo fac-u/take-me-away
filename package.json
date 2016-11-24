@@ -34,6 +34,7 @@
     "tape": "^4.6.2"
   },
   "dependencies": {
+    "env2": "^2.1.1",
     "handlebars": "^4.0.6",
     "hapi": "^15.2.0",
     "inert": "^4.0.2",
