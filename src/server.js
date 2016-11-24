@@ -44,7 +44,7 @@ server.register(Vision, (err) => {
         var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
         request(url, (err, response, body) => {
           if (err || response.statusCode !== 200) {
-            cb(err);
+            cb("Couldn't retrieve weather data");
           } else {
             cb(null, body);
           }
@@ -54,7 +54,7 @@ server.register(Vision, (err) => {
       function processWeather(err, obj) {
         let weatherData;
         if (err) {
-          continue;
+          console.log(err);
         }
         else {
           obj = JSON.parse(obj);
