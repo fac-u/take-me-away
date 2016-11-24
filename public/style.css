@@ -7,23 +7,29 @@ html {
 }
 
 .weather {
-  position: absolute;
+  width:80vw;
+  font-family: 'Cabin', sans-serif;
   color: white;
-  top: 10%;
-  left: 15%;
+  margin: 0 auto;
+  margin-top: 20px;
   background-color: #999;
   opacity: 0.9;
   padding: 20px;
   border-radius: 10px;
-  text-align: center;
+  text-align: left;
+}
+
+#weather-text {
+  margin-top:5px;
+  width: 50%;
+  float:left;
 }
 
 .news {
-  position: absolute;
-  top: 10%;
-  right: 9%;
+  width:94vw;
+  font-family: 'Cabin', sans-serif;
   text-align: left;
-  max-width: 25rem;
+  margin: 0 auto;
 }
 
 .article {
@@ -36,5 +42,23 @@ html {
 }
 
 a {
-  color: inherit
+  color: inherit;
+}
+
+/* media queries */
+@media (min-width: 600px) {
+  .weather {
+    width: 20vw;
+    float: left;
+    margin-top: 10vh;
+    margin-left: 13vw;
+  }
+
+  .news {
+    width: 40vw;
+    margin-top:8vh;
+    margin-left:5vw;
+    float:left;
+  }
+
 }
