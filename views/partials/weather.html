@@ -1,4 +1,4 @@
-{{if weatherData}}
+{{#if weatherData}}
   <h1>Good Morning {{weatherData.city}}</h1>
   <p id="weather-text">Weather today in {{weatherData.city}}: {{weatherData.cond}}</p></br><img src={{weatherData.icon}}>
   <p>Top temperature: {{weatherData.topTemp}} degrees</p>
