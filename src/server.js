@@ -5,6 +5,7 @@ const Handlebars = require('handlebars');
 const server = new Hapi.Server();
 const request = require("request");
 const getArticles = require("./news");
+const getWeather = require("./weather");
 const env = require('env2')('./api-keys.env');
 
 
@@ -39,17 +40,6 @@ server.register(Vision, (err) => {
 
       getArticles(processArticles);
       getWeather(processWeather);
-
-      function getWeather (cb) {
-        var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
-        request(url, (err, response, body) => {
-          if (err || response.statusCode !== 200) {
-            cb("Couldn't retrieve weather data");
-          } else {
-            cb(null, body);
-          }
-        })
-      }
 
       function processWeather(err, obj) {
         let weatherData;
