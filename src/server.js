@@ -52,16 +52,22 @@ server.register(Vision, (err) => {
       }
 
       function processWeather(err, obj) {
-        obj = JSON.parse(obj);
-        let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
-        let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
-        const weatherData = {
-          city: location.replace(/\w+\//, ''),
-          cond: cond.toLowerCase(),
-          topTemp: obj.forecast.simpleforecast.forecastday[0].high.celsius,
-          icon: obj.forecast.simpleforecast.forecastday[0].icon_url
+        let weatherData;
+        if (err) {
+          continue;
         }
-        context.weatherData = weatherData;
+        else {
+          obj = JSON.parse(obj);
+          let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
+          let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
+          const weatherData = {
+            city: location.replace(/\w+\//, ''),
+            cond: cond.toLowerCase(),
+            topTemp: obj.forecast.simpleforecast.forecastday[0].high.celsius,
+            icon: obj.forecast.simpleforecast.forecastday[0].icon_url
+          }
+          context.weatherData = weatherData;
+        }
         counter--;
         if (counter === 0) {
           buildView(context);
