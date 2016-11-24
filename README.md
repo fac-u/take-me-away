@@ -28,14 +28,14 @@
 #### App
 1. Clone the repo to a local directory
 2. Run npm install from the root folder to install dependencies
-3. Run nodemon from the terminal to start the server through nodemon (```npm start``` or ```npm run devStart```), or simply ```node index.js```
+3. Run nodemon from the terminal to start the server through nodemon ```npm run devStart```, or ```npm start``` without nodemon
 4. Add a new file called 'api-keys.env' to the root folder and request keys from FAC-U team
 4. Access the front end by visiting http://localhost:4000
 
 #### Tests
 1. Run ```npm test``` to execute tape tests
 - test/main.test.js: these are the server, route and handler tests
-- We use Istanbul & Codecov
+- ```run coverage``` to run Istanbul & Codecov
 - Back-end tests are written using Tape and run through Tap-spec
 - At this stage there are no QUnit tests
 
