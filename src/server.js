@@ -44,7 +44,7 @@ server.register(Vision, (err) => {
         var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
         request(url, (err, response, body) => {
           if (err || response.statusCode !== 200) {
-            cb(err);
+            cb("Couldn't retrieve weather data");
           } else {
             cb(null, body);
           }
@@ -52,16 +52,22 @@ server.register(Vision, (err) => {
       }
 
       function processWeather(err, obj) {
-        obj = JSON.parse(obj);
-        let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
-        let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
-        const weatherData = {
-          city: location.replace(/\w+\//, ''),
-          cond: cond.toLowerCase(),
-          topTemp: obj.forecast.simpleforecast.forecastday[0].high.celsius,
-          icon: obj.forecast.simpleforecast.forecastday[0].icon_url
+        let weatherData;
+        if (err) {
+          console.log(err);
         }
-        context.weatherData = weatherData;
+        else {
+          obj = JSON.parse(obj);
+          let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
+          let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
+          const weatherData = {
+            city: location.replace(/\w+\//, ''),
+            cond: cond.toLowerCase(),
+            topTemp: obj.forecast.simpleforecast.forecastday[0].high.celsius,
+            icon: obj.forecast.simpleforecast.forecastday[0].icon_url
+          }
+          context.weatherData = weatherData;
+        }
         counter--;
         if (counter === 0) {
           buildView(context);
@@ -69,7 +75,12 @@ server.register(Vision, (err) => {
       }
 
       function processArticles(err, obj) {
-        context.articles = obj;
+        if (err) {
+          console.log(err);
+        }
+        else {
+          context.articles = obj;
+        }
         counter--;
         if (counter === 0) {
           buildView(context);
