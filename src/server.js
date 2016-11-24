@@ -4,7 +4,8 @@ const Inert = require('inert');
 const Handlebars = require('handlebars');
 const server = new Hapi.Server();
 const request = require("request");
-const getArticles = require("./news");
+const news = require("./news");
+const weather = require("./weather");
 const env = require('env2')('./api-keys.env');
 
 
@@ -31,62 +32,14 @@ server.register(Vision, (err) => {
     handler: (req, reply) => {
 
       let context = {};
-      let counter = 2;
+      let counter = { remaining: 2 };
 
       function buildView (context) {
         reply.view('index', context);
       }
 
-      getArticles(processArticles);
-      getWeather(processWeather);
-
-      function getWeather (cb) {
-        var url = 'http://api.wunderground.com/api/' + process.env.WEATHER_KEY + '/forecast/lang:EN/q/autoip.json';
-        request(url, (err, response, body) => {
-          if (err || response.statusCode !== 200) {
-            cb("Couldn't retrieve weather data");
-          } else {
-            cb(null, body);
-          }
-        })
-      }
-
-      function processWeather(err, obj) {
-        let weatherData;
-        if (err) {
-          console.log(err);
-        }
-        else {
-          obj = JSON.parse(obj);
-          let location = obj.forecast.simpleforecast.forecastday[0].date.tz_long;
-          let cond = obj.forecast.simpleforecast.forecastday[0].conditions;
-          const weatherData = {
-            city: location.replace(/\w+\//, ''),
-            cond: cond.toLowerCase(),
-            topTemp: obj.forecast.simpleforecast.forecastday[0].high.celsius,
-            icon: obj.forecast.simpleforecast.forecastday[0].icon_url
-          }
-          context.weatherData = weatherData;
-        }
-        counter--;
-        if (counter === 0) {
-          buildView(context);
-        }
-      }
-
-      function processArticles(err, obj) {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          context.articles = obj;
-        }
-        counter--;
-        if (counter === 0) {
-          buildView(context);
-        }
-      }
-
+      news.get(news.process(context, counter, buildView));
+      weather.get(weather.process(context, counter, buildView));
     }
   });
 });
