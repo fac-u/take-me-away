@@ -76,7 +76,7 @@ server.register(Vision, (err) => {
 
       function processArticles(err, obj) {
         if (err) {
-          continue;
+          console.log(err);
         }
         else {
           context.articles = obj;

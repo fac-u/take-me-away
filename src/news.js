@@ -5,7 +5,7 @@ var getArticles = (cb) => {
   var url = `https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=${process.env.NEWS_KEY}`;
   request(url, (err, response, body) => {
     if (err || response.statusCode !== 200) {
-      cb(err);
+      cb("Couldn't retrieve news articles");
     } else {
       let result = JSON.parse(body);
       let articles = result.articles.slice(0,5);
