@@ -15,7 +15,3 @@ var getArticles = (cb) => {
 }
 
 module.exports = getArticles;
-
-/*
-articles = [{title: 'Giraffes rob bank in Nairobi'}, {title: 'Aliens land on earth, not in America'}];
-*/
