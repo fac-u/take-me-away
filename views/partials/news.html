@@ -1,3 +1,7 @@
-{{#each articles}}
-  <div class="article"><a href={{this.url}}>{{this.title}}</a></div>
-{{/each}}
+{{#if articles}}
+  {{#each articles}}
+    <div class="article"><a href={{this.url}}>{{this.title}}</a></div>
+  {{/each}}
+{{else}}
+  <div class="article">Where's my news, bitch?!</div>
+{{/if}}

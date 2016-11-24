@@ -75,7 +75,12 @@ server.register(Vision, (err) => {
       }
 
       function processArticles(err, obj) {
-        context.articles = obj;
+        if (err) {
+          continue;
+        }
+        else {
+          context.articles = obj;
+        }
         counter--;
         if (counter === 0) {
           buildView(context);
